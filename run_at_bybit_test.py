@@ -223,9 +223,6 @@ def main() -> None:
                 logger.info(f"Non-Flat Position with Flat Order Type: {order}")
                 quit()
 
-            # print(order)
-            # quit()
-
             market, max_rank, allocations = None, None, None
 
             # Iterate through each element in the trade_pair list
@@ -240,10 +237,6 @@ def main() -> None:
 
             # Check to see if muid is in the allocated muid list
             if market and max_rank and (order["muid"] in allocations or order["rank"] in range(1, max_rank)):
-                # if net leverage is positive, set the multiplier to 1, otherwise -1
-                # if order["order_type"] == "FLAT":
-                # 	if order["position_type"] == "LONG":
-                # 		order["leverage"] = 1
                 direction = order["order_type"]  # LONG, SHORT, FLAT
 
                 # Prepare the order
@@ -276,19 +269,17 @@ def main() -> None:
                 if direction == "LONG" and sum(queued_order[market][direction]["allocation"].values()) > 1:
                     logger.info(queued_order)
                     quit()
-                    # continue
 
                 # Proceed with your logic, since a valid market was found
                 logger.info(f"New trade to process: {queued_order}")
 
                 TimeUtil.sleeper(1, "sent order", logger)
-                # quit()
 
         TimeUtil.sleeper(RUN_SLEEP_TIME, "completed request", logger)
 
 
 if __name__ == "__main__":
     # to be named: Taoshi SN8 - Dale @ Bybit'
-    secrets = get_secrets()
+    SECRETS = get_secrets()
 
     main()
